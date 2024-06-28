@@ -25,6 +25,7 @@
     "@types/jest": "^29.5.12",
     "@types/joi": "^17.2.3",
     "@types/node": "^20.14.9",
+    "@types/pg": "^8.11.6",
     "@types/supertest": "^6.0.2",
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",

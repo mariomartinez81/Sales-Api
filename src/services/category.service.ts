@@ -3,7 +3,6 @@ import boom from '@hapi/boom';
 const { models } = require('./../libs/sequelize');
 
 class CategoryService {
-  constructor() {}
   async create(data: any) {
     const newCategory = await models.Category.create(data);
     return newCategory;
@@ -22,13 +21,25 @@ class CategoryService {
   }
 
   async update(id: number, changes: any) {
-    return {
-      id,
-      changes,
-    };
+    const category = await models.Category.update(changes, {
+      where: {
+        id,
+      },
+    });
+    return category;
   }
 
   async delete(id: number) {
+    const category = await this.findOne(id);
+
+    if (!category) {
+      throw boom.notFound('category not found');
+    }
+    await models.Category.destroy({
+      where: {
+        id,
+      },
+    });
     return { id };
   }
 }
