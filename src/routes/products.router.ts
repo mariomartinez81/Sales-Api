@@ -26,7 +26,7 @@ router.get(
 
 router.post('/', validatorHandler(createProductSchema, 'body'), createProduct);
 
-router.patch(
+router.put(
   '/:id',
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),

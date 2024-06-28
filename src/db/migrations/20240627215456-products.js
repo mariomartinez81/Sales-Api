@@ -1,4 +1,4 @@
-const { PRODUCT_TABLE } = require('../utils/constants');
+const { PRODUCT_TABLE, CATEGORY_TABLE } = require('../utils/constants');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -13,11 +13,18 @@ module.exports = {
       },
       name: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       image: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      price: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       createdAt: {
@@ -25,6 +32,17 @@ module.exports = {
         type: DataTypes.DATE,
         field: 'created_at',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      categoryId: {
+        field: 'category_id',
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: CATEGORY_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
     });
     await transaction.commit();

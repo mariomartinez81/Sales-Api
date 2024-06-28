@@ -1,27 +1,27 @@
 import boom from '@hapi/boom';
 
-const { models } = require('./../libs/sequelize');
+import { Category } from '../db/models/category.model';
 
 class CategoryService {
-  async create(data: any) {
-    const newCategory = await models.Category.create(data);
-    return newCategory;
-  }
-
   async find() {
-    const categories = await models.Category.findAll();
+    const categories = await Category.findAll();
     return categories;
   }
 
   async findOne(id: number) {
-    const category = await models.Category.findByPk(id, {
+    const category = await Category.findByPk(id, {
       include: ['products'],
     });
     return category;
   }
 
+  async create(data: any) {
+    const newCategory = await Category.create(data);
+    return newCategory;
+  }
+
   async update(id: number, changes: any) {
-    const category = await models.Category.update(changes, {
+    const category = await Category.update(changes, {
       where: {
         id,
       },
@@ -35,7 +35,7 @@ class CategoryService {
     if (!category) {
       throw boom.notFound('category not found');
     }
-    await models.Category.destroy({
+    await Category.destroy({
       where: {
         id,
       },

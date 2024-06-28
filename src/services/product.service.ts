@@ -1,7 +1,6 @@
 import { Op } from 'sequelize';
 import boom from '@hapi/boom';
-
-const { models } = require('../libs/sequelize');
+import { Product } from '../db/models/product.model';
 
 class ProductsService {
   async find(query: any) {
@@ -27,30 +26,27 @@ class ProductsService {
         [Op.lte]: price_max,
       };
     }
-    const products = await models.Product.findAll(options);
+    const products = await Product.findAll(options);
     return products ?? [];
   }
 
   async findOne(id: number) {
-    const product = await models.Product.findByPk(id, {
+    const product = await Product.findByPk(id, {
       include: ['category'],
     });
     if (!product) {
       throw boom.notFound('product not found');
     }
-    if (product.isBlock) {
-      throw boom.conflict('product is block');
-    }
     return product;
   }
 
   async create(data: any) {
-    const newProduct = await models.Product.create(data);
+    const newProduct = await Product.create(data);
     return newProduct;
   }
 
   async update(id: number, changes: any) {
-    const product = await models.Product.update(changes, {
+    const product = await Product.update(changes, {
       where: {
         id,
       },
@@ -63,7 +59,7 @@ class ProductsService {
     if (!product) {
       throw boom.notFound('product not found');
     }
-    await models.Product.destroy({
+    await Product.destroy({
       where: {
         id,
       },

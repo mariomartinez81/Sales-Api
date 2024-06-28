@@ -8,8 +8,11 @@ import {
   ormErrorHandler,
 } from './middlewares/error.handler';
 import routerApi from './routes';
+import setupSequalize from './libs/sequelize';
 
-const port = process.env.PORT ?? 3000;
+setupSequalize();
+
+const port = process.env.PORT ?? 3008;
 
 const app = express();
 

@@ -1,23 +1,27 @@
-import { Sequelize } from 'sequelize';
+import { Options, Sequelize } from 'sequelize';
 
 import { config } from './../config';
 import { setupModels } from '../db/models';
 
-const options: any = {
-  dialect: 'postgres',
-  logging: config.isProd ? false : true,
+const setupSequalize = () => {
+  const options: Options = {
+    dialect: 'postgres',
+    logging: config.isProd ? false : true,
+  };
+
+  if (config.isProd) {
+    options.dialectOptions = {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    };
+  }
+
+  const sequelize = new Sequelize(config.dbUrl, options);
+
+  setupModels(sequelize);
+
+  return sequelize;
 };
 
-if (config.isProd) {
-  options.dialectOptions = {
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  };
-}
-
-const sequelize = new Sequelize(config.dbUrl, options);
-
-setupModels(sequelize);
-
-export default sequelize;
+export default setupSequalize;

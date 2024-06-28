@@ -30,7 +30,7 @@ router.post(
   createCategory,
 );
 
-router.patch(
+router.put(
   '/:id',
   validatorHandler(getCategorySchema, 'params'),
   validatorHandler(updateCategorySchema, 'body'),
