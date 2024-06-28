@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { config } from './config';
+
 import {
   boomErrorHandler,
   errorHandler,
@@ -9,12 +9,14 @@ import {
 } from './middlewares/error.handler';
 import routerApi from './routes';
 
-const { port } = config;
+const port = process.env.PORT ?? 3000;
 
 const app = express();
 
+// middlewares
 app.use(cors());
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(logErrors);
 app.use(ormErrorHandler);
 app.use(boomErrorHandler);

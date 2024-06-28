@@ -1,6 +1,6 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
-import { CATEGORY_TABLE } from './category.model';
 
+const CATEGORY_TABLE = 'categories';
 const PRODUCT_TABLE = 'products';
 
 const ProductSchema = {

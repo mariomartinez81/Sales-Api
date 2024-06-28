@@ -2,12 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "eslint",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
@@ -35,7 +38,9 @@
     "sequelize-cli": "^6.6.2",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.5",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.2"
   },
   "dependencies": {

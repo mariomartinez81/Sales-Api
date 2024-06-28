@@ -1,12 +1,12 @@
-import { config } from '../../src/config';
+require('dotenv').config();
 
 module.exports = {
   development: {
-    url: config.dbUrl,
+    url: process.env.DATABASE_URL,
     dialect: 'postgres',
   },
   production: {
-    url: config.dbUrl,
+    url: process.env.DATABASE_URL,
     dialect: 'postgres',
     dialectOptions: {
       ssl: {

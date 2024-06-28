@@ -1,14 +1,37 @@
-import { PRODUCT_TABLE, ProductSchema } from '../models/product.model';
+const { PRODUCT_TABLE } = require('../utils/constants');
 
 module.exports = {
-  up: async (queryInterface) => {
-    const transaction = await queryInterface.sequelize.transaction;
-    await queryInterface.createTable(PRODUCT_TABLE, ProductSchema);
+  up: async (queryInterface, Sequelize) => {
+    const { DataTypes } = Sequelize;
+    const transaction = await queryInterface.sequelize.transaction();
+    await queryInterface.createTable(PRODUCT_TABLE, {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      name: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
     await transaction.commit();
   },
 
   down: async (queryInterface) => {
-    const transaction = await queryInterface.sequelize.transaction;
+    const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.dropTable(PRODUCT_TABLE);
       await transaction.commit();

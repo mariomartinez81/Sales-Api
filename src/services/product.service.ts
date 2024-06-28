@@ -4,11 +4,6 @@ import boom from '@hapi/boom';
 const { models } = require('../libs/sequelize');
 
 class ProductsService {
-  async create(data: any) {
-    const newProduct = await models.Product.create(data);
-    return newProduct;
-  }
-
   async find(query: any) {
     const options: any = {
       include: ['category'],
@@ -33,7 +28,7 @@ class ProductsService {
       };
     }
     const products = await models.Product.findAll(options);
-    return products;
+    return products ?? [];
   }
 
   async findOne(id: number) {
@@ -47,6 +42,11 @@ class ProductsService {
       throw boom.conflict('product is block');
     }
     return product;
+  }
+
+  async create(data: any) {
+    const newProduct = await models.Product.create(data);
+    return newProduct;
   }
 
   async update(id: number, changes: any) {
