@@ -1,5 +1,4 @@
 import * as express from 'express';
-import ProductsService from '../services/product.service';
 import validatorHandler from '../middlewares/validator.handler';
 import {
   createProductSchema,
@@ -16,7 +15,6 @@ import {
 } from '../controllers/products.controller';
 
 const router = express.Router();
-const service = new ProductsService();
 
 router.get('/', validatorHandler(queryProductSchema, 'query'), getProducts);
 
