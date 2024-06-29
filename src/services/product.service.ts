@@ -1,10 +1,12 @@
 import { Op } from 'sequelize';
 import boom from '@hapi/boom';
 import { Product } from '../db/models/product.model';
+import { CreateProductProps, ProductQuery } from './types/products.types';
+import { DEFAULT_IMAGE } from '../utils/constanst';
 
 class ProductsService {
-  async find(query: any) {
-    const options: any = {
+  async find(query: Partial<ProductQuery>): Promise<Product[] | []> {
+    const options: Partial<ProductQuery | any> = {
       include: ['category'],
       where: {},
     };
@@ -30,7 +32,7 @@ class ProductsService {
     return products ?? [];
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Product> {
     const product = await Product.findByPk(id, {
       include: ['category'],
     });
@@ -40,21 +42,33 @@ class ProductsService {
     return product;
   }
 
-  async create(data: any) {
-    const newProduct = await Product.create(data);
+  async create(data: CreateProductProps): Promise<Product> {
+    const newData = data;
+    if (!data.image) {
+      newData.image = DEFAULT_IMAGE;
+    }
+    const newProduct = await Product.create(data as any);
     return newProduct;
   }
 
-  async update(id: number, changes: any) {
-    const product = await Product.update(changes, {
+  async update(
+    id: number,
+    changes: CreateProductProps,
+  ): Promise<Partial<Product> | null> {
+    const product = await this.findOne(id);
+    if (!product) {
+      throw boom.notFound('product not found');
+    }
+    const affectedRows = await Product.update(changes, {
       where: {
         id,
       },
     });
-    return product;
+
+    return affectedRows ? { ...product.toJSON(), ...changes } : null;
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<{ id: number }> {
     const product = await this.findOne(id);
     if (!product) {
       throw boom.notFound('product not found');
