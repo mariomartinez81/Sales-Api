@@ -1,4 +1,4 @@
-name: Notify chat push
+name: Notify on Push
 
 on:
   push:
@@ -7,66 +7,23 @@ on:
       - testing
 
 jobs:
-  notify-team-job:
+  notify:
     runs-on: ubuntu-latest
 
     steps:
       - name: Git Push Details
+        id: git_details
         run: |
           echo "Push creator: ${{ github.event.sender.login }}"
           echo "Push project: ${{ github.event.repository.name }}"
           echo "Push url: ${{ github.event.compare }}"
+          echo "PR title: ${{ github.event.pull_request.title }}"
+          echo "PR body: ${{ github.event.pull_request.body }}"
 
-      - name: Google Chat Notification
+      - name: Slack Notification
         run: |
-          curl --location --request POST '${{ secrets.GOOGLE_CHAT_SPACE_WEBHOOK }}' \
+          curl --location --request POST 'https://hooks.slack.com/services/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' \
           --header 'Content-Type: application/json' \
           --data-raw '{
-            "cardsV2": [
-                {
-                    "card": {
-                        "header": {
-                            "title": "NEW PUSH",
-                            "subtitle": "By: ${{ github.event.sender.login }}",
-                            "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png",
-                            "imageType": "CIRCLE",
-                            "imageAltText": "Avatar for Notifier"
-                        },
-                        "sections": [
-                            {
-                                "widgets": [
-                                    {
-                                        "decoratedText": {
-                                            "topLabel": "PROJECT",
-                                            "text": "${{ github.event.repository.name }}"
-                                        }
-                                    },
-                                    {
-                                        "decoratedText": {
-                                            "topLabel": "BRANCH",
-                                            "text": "${{ github.event.ref }}"
-                                        }
-                                    }
-                                ]
-                            },
-                            {
-                                "widgets": {
-                                    "buttonList": {
-                                        "buttons": [
-                                            {
-                                                "text": "Details",
-                                                "onClick": {
-                                                    "openLink": {
-                                                        "url": "${{ github.event.compare }}"
-                                                    }
-                                                }
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
+            "text": "NEW PUSH by ${{ github.event.sender.login }}\n*Project:* ${{ github.event.repository.name }}\n*Branch:* ${{ github.event.ref }}\n*PR Title:* ${{ github.event.pull_request.title }}\n*PR Description:* ${{ github.event.pull_request.body }}\n*Details:* <${{ github.event.compare }}>"
           }'
