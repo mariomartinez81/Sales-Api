@@ -142,7 +142,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Iphone 15\",\n\t\"image\": \"https://mac-center.com/cdn/shop/files/iPhone_15_Pro_Natural_Titanium_PDP_Image_Position-1__COES_a670ce02-6ab0-46c6-9d14-535439c21c7f_823x.jpg?v=1700298826\",\n\t\"description\": \"The iPhone 15 features a 6.1-inch Super Retina XDR OLED display, an A16 Bionic chip for exceptional performance, and an enhanced dual-camera system with advanced night photography capabilities. It also offers long battery life and increased water and dust resistance.\",\n\t\"price\": 2000,\n    \"categoryId\":1\n}",
+							"raw": "{\n\t\"name\": \"Iphone 16\",\n\t\"image\": \"https://mac-center.com/cdn/shop/files/iPhone_15_Pro_Natural_Titanium_PDP_Image_Position-1__COES_a670ce02-6ab0-46c6-9d14-535439c21c7f_823x.jpg?v=1700298826\",\n\t\"description\": \"The iPhone 15 features a 6.1-inch Super Retina XDR OLED display, an A16 Bionic chip for exceptional performance, and an enhanced dual-camera system with advanced night photography capabilities. It also offers long battery life and increased water and dust resistance.\",\n\t\"price\": 2000,\n    \"categoryId\":1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
