@@ -1,0 +1,22 @@
+name: Test Backend API
+
+on:
+  pull_request:
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.head_ref, 'module') || startsWith(github.head_ref, 'bug') || startsWith(github.head_ref, 'task') || startsWith(github.head_ref, 'merge')  || startsWith(github.head_ref, 'merge') }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test

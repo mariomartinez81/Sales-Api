@@ -1,0 +1,72 @@
+name: Notify chat push
+
+on:
+  push:
+    branches:
+      - main
+      - testing
+
+jobs:
+  notify-team-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git Push Details
+        run: |
+          echo "Push creator: ${{ github.event.sender.login }}"
+          echo "Push project: ${{ github.event.repository.name }}"
+          echo "Push url: ${{ github.event.compare }}"
+
+      - name: Google Chat Notification
+        run: |
+          curl --location --request POST '${{ secrets.GOOGLE_CHAT_SPACE_WEBHOOK }}' \
+          --header 'Content-Type: application/json' \
+          --data-raw '{
+            "cardsV2": [
+                {
+                    "card": {
+                        "header": {
+                            "title": "NEW PUSH",
+                            "subtitle": "By: ${{ github.event.sender.login }}",
+                            "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png",
+                            "imageType": "CIRCLE",
+                            "imageAltText": "Avatar for Notifier"
+                        },
+                        "sections": [
+                            {
+                                "widgets": [
+                                    {
+                                        "decoratedText": {
+                                            "topLabel": "PROJECT",
+                                            "text": "${{ github.event.repository.name }}"
+                                        }
+                                    },
+                                    {
+                                        "decoratedText": {
+                                            "topLabel": "BRANCH",
+                                            "text": "${{ github.event.ref }}"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "widgets": {
+                                    "buttonList": {
+                                        "buttons": [
+                                            {
+                                                "text": "Details",
+                                                "onClick": {
+                                                    "openLink": {
+                                                        "url": "${{ github.event.compare }}"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+          }'

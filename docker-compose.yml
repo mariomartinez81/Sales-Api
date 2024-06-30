@@ -10,7 +10,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=postgres://mario:admin123@localhost:5433/my_store
+      - DATABASE_URL=postgres://mario:admin123@postgres:5432/my_store
   postgres:
     image: postgres:13
     environment:
