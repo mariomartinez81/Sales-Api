@@ -16,7 +16,7 @@ const getCategories = async (
   }
 };
 
-const getCategoriesById = async (
+const getCategoryById = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -75,7 +75,7 @@ const deleteCategory = async (
 
 export {
   getCategories,
-  getCategoriesById,
+  getCategoryById,
   createCategory,
   updateCategory,
   deleteCategory,

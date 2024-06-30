@@ -10,7 +10,7 @@ import {
   createCategory,
   deleteCategory,
   getCategories,
-  getCategoriesById,
+  getCategoryById,
   updateCategory,
 } from '../controllers/categories.controller';
 
@@ -21,7 +21,7 @@ router.get('/', getCategories);
 router.get(
   '/:id',
   validatorHandler(getCategorySchema, 'params'),
-  getCategoriesById,
+  getCategoryById,
 );
 
 router.post(

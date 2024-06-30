@@ -1,7 +1,7 @@
 import boom from '@hapi/boom';
 
 import { Category } from '../db/models/category.model';
-import { CategoryProps } from './types/categories.types';
+import { CategoryProps, CreateCategory } from './types/categories.types';
 
 class CategoryService {
   async find(): Promise<Category[] | []> {
@@ -16,8 +16,13 @@ class CategoryService {
     return category;
   }
 
-  async create(data: Partial<Category>): Promise<Category> {
-    const newCategory = await Category.create(data);
+  async create(data: CreateCategory): Promise<Category> {
+    const { name } = data;
+    const categoryExists = await Category.findOne({ where: { name } });
+    if (categoryExists) {
+      throw boom.conflict('category already exists');
+    }
+    const newCategory = await Category.create(data as Partial<Category>);
     return newCategory;
   }
 
@@ -29,13 +34,16 @@ class CategoryService {
     if (!category) {
       throw boom.notFound('category not found');
     }
-    const affectedRows = await Category.update(changes, {
+    const [_, updatedCategories] = await Category.update(changes, {
       where: {
         id,
       },
+      returning: true,
     });
 
-    return affectedRows ? { ...category.toJSON(), ...changes } : null;
+    const updatedCategory = updatedCategories[0].toJSON();
+
+    return updatedCategory;
   }
 
   async delete(id: number): Promise<{ id: number }> {

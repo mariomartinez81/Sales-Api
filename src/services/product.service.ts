@@ -59,13 +59,16 @@ class ProductsService {
     if (!product) {
       throw boom.notFound('product not found');
     }
-    const affectedRows = await Product.update(changes, {
+    const [_, updatedCategories] = await Product.update(changes, {
       where: {
         id,
       },
+      returning: true,
     });
 
-    return affectedRows ? { ...product.toJSON(), ...changes } : null;
+    const updatedCategory = updatedCategories[0].toJSON();
+
+    return updatedCategory;
   }
 
   async delete(id: number): Promise<{ id: number }> {

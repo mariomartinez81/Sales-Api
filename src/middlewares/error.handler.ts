@@ -7,16 +7,20 @@ function logErrors(err: any, req: Request, res: Response, next: NextFunction) {
   next(err);
 }
 
-function errorHandler(
-  err: Error,
+function ormErrorHandler(
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  res.status(500).json({
-    message: err.message,
-    stack: err.stack,
-  });
+  if (err instanceof ValidationError) {
+    return res.status(409).json({
+      statusCode: 409,
+      message: err.name,
+      errors: err.errors,
+    });
+  }
+  next(err);
 }
 
 function boomErrorHandler(
@@ -27,25 +31,24 @@ function boomErrorHandler(
 ) {
   if (err.isBoom) {
     const { output } = err;
-    res.status(output.statusCode).json(output.payload);
+    return res.status(output.statusCode).json(output.payload);
   }
   next(err);
 }
 
-function ormErrorHandler(
+function errorHandler(
   err: any,
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  if (err instanceof ValidationError) {
-    res.status(409).json({
-      statusCode: 409,
-      message: err.name,
-      errors: err.errors,
-    });
+  if (res.headersSent) {
+    return next(err);
   }
-  next(err);
+  return res.status(500).json({
+    message: err.message,
+    stack: err.stack,
+  });
 }
 
-export { logErrors, errorHandler, boomErrorHandler, ormErrorHandler };
+export { logErrors, ormErrorHandler, boomErrorHandler, errorHandler };
