@@ -63,10 +63,17 @@
     ```
 
 ### Endpoints
-- **GET /api/products**: Get all products
-- **POST /api/products**: Create a new product
-- **PUT /api/products/:id**: Update an existing product
-- **DELETE /api/products/:id**: Delete a product
+#### Products
+- **GET /api/v1/products**: Get all products
+- **POST /api/v1/products**: Create a new product
+- **PUT /api/v1/products/:id**: Update an existing product
+- **DELETE /api/v1/products/:id**: Delete a product
+
+#### Categories
+- **GET /api/v1/products**: Get all products
+- **POST /api/v1/products**: Create a new product
+- **PUT /api/v1/products/:id**: Update an existing product
+- **DELETE /api/v1/products/:id**: Delete a product
 
 ### Postman Collection
 To test the API, a Postman collection is included in the `postman` directory. To import it:
